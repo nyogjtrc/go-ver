@@ -11,19 +11,39 @@ import (
 // Version info default as unknown
 // will overwrite by ldflags
 var (
-	Version   string = "unknown"
-	BuildTime string = "unknown"
-	Commit    string = "unknown"
+	Version string = "unknown"
+	BuildAt string = "unknown"
+	Commit  string = "unknown"
 )
 
 // Print version info
 func Print() {
+	f := `  Version:	%s
+  Go version:	%s
+  Build at:	%s
+  Commit:	%s
+  OS/ARCH:	%s/%s
+`
+
 	fmt.Printf(
-		"  Version: %s\n  GoVersion: %s\n  BuildTime: %s\n  Commit: %s\n",
+		f,
 		Version,
 		runtime.Version(),
-		BuildTime,
+		BuildAt,
 		Commit,
+		runtime.GOOS,
+		runtime.GOARCH,
+	)
+}
+
+func PrintOneLine() {
+	fmt.Printf("%s build from %s on %s/%s at %s, %s\n",
+		Version,
+		Commit,
+		runtime.GOOS,
+		runtime.GOARCH,
+		BuildAt,
+		runtime.Version(),
 	)
 }
 
@@ -32,8 +52,9 @@ func Maps() map[string]string {
 	return map[string]string{
 		"version":    Version,
 		"go_version": runtime.Version(),
-		"build_time": BuildTime,
+		"build_at":   BuildAt,
 		"commit":     Commit,
+		"os/arch":    fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
 	}
 }
 
